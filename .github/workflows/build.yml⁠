@@ -1,0 +1,20 @@
+name: Build iOS Dylib
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Compile dylib
+        run: |
+          clang -dynamiclib -arch arm64 -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -miphoneos-version-min=11.0 main.mm -o K13Mod.dylib -framework UIKit -framework Foundation
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: K13ModDylib
+          path: K13Mod.dylib
